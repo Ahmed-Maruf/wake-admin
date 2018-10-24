@@ -43,7 +43,6 @@
 			$this->db->bind(':contact_name','');
 			$this->db->bind(':contact_email','');
 			$this->db->bind(':contact_phone','');
-//:about, :website, :logo, :lead_time, :priority, :status, :image, :homepageOrder
 			$this->db->bind(':about',$datas['about']);
 			$this->db->bind(':website','');
 			$this->db->bind(':logo','');
@@ -68,6 +67,27 @@
 								  WHERE id = :manufacturer_id");
 			$this->db->bind(':manufacturer_id',$id);
 			return $this->db->single();
+		}
+
+		public function updateManufacturerById($datas){
+			$this->db->query("UPDATE
+								  manufacturers SET name = :manufacturer_name, page_name = :page_name, title_tag = :title_tag, description_tag = :description_tag, keywords_tag = :keywords_tag, about = :about, image = :image
+								  WHERE id = :id
+								  ");
+			$this->db->bind(':id',$datas['id']);
+			$this->db->bind(':manufacturer_name',$datas['name']);
+			$this->db->bind(':page_name',$datas['page_name']);
+			$this->db->bind(':title_tag',$datas['titleTag']);
+			$this->db->bind(':description_tag',$datas['description']);
+			$this->db->bind(':keywords_tag',$datas['keywordTag']);
+			$this->db->bind(':about',$datas['about']);
+			$this->db->bind(':image',$datas['image']);
+
+
+			if($this->db->execute()){
+				return true;
+			}
+			return false;
 		}
 
 	}

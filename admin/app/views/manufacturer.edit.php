@@ -59,8 +59,9 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="id" id="id" value="">
-                                <button class="ui positive button" id="updateManf">Update! <i class="fa fa-refresh"></i>
-                                </button>
+								<input type = "hidden" name="manufacturer_id" id="manufacturer_id" value="<?php echo $datas->id?>">
+								<input type = "hidden" name="update" value="update" id="manufacturer_cru">
+								<div class = "ui positive button" id = "manufacturer_event" >Update!</div >
                             </form>
                         </div>
                     </div>

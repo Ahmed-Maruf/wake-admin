@@ -18,13 +18,14 @@
 			return $this->view('manufacturer',$manufacturers);
 		}
 
-		public function add()
+		public function create()
 		{
 			header( "Content-Type: application/json");
 			$datas = [];
 			$datas['name'] = $_POST['n'];
 			$datas['description'] = $_POST['d'];
 			$datas['keywordTag'] = $_POST['k'];
+			$datas['pageName'] = $_POST['p'];
 			$datas['titleTag']= $_POST['t'];
 			$datas['about'] = $_POST['a'];
 			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
@@ -40,14 +41,37 @@
 			}
 		}
 		
-		public function edit($id)
+		public function update($id)
 		{
 			
 			if($_GET['status'] =='show'){
 				$manufacturer = $this->manufacturerModel->getManufacturerById($id);
 				return $this->view('manufacturer.edit',$manufacturer);
 			}
-			$manufacturers = $this->manufacturerModel->getManufacturerById($id);
+			header( "Content-Type: application/json");
+			$datas = [];
+			$datas['id'] = $id;
+			$datas['name'] = $_POST['n'];
+			$datas['description'] = $_POST['d'];
+			$datas['keywordTag'] = $_POST['k'];
+			$datas['pageName'] = $_POST['p'];
+			$datas['titleTag']= $_POST['t'];
+			$datas['about'] = $_POST['a'];
+			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
+			$datas['manufacturer_name'] = str_replace(" ", "-", $datas['name']);
+			$datas['image']= strtolower($datas['manufacturer_name'] . $datas['imageFormat']);
+			if($_POST['image'] == ""){
+				$datas['image'] = "";
+			}
+			if($this->manufacturerModel->updateManufacturerById($datas)){
+				echo json_encode( TRUE );
+			}else{
+				echo json_encode( FALSE );
+			}
+		}
+
+		public function control(){
+			return $this->view('manufacturer.control');
 		}
 
 	}

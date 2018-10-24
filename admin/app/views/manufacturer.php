@@ -44,7 +44,8 @@
 									</div >
 								</div >
 
-								<div class = "ui positive button" id = "createManf" >Create!</div >
+								<input type = "hidden" name="create" value="create" id="manufacturer_cru">
+								<div class = "ui positive button" id = "manufacturer_event" >Create!</div >
 							</form >
 						</div >
 						<div class = "ui segment" >
