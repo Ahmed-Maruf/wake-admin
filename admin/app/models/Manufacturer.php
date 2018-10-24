@@ -60,6 +60,14 @@
 			return false;
 
 		}
-
+		
+		public function getManufacturerById($id)
+		{
+			$this->db->query("SELECT *
+								  FROM manufacturers
+								  WHERE id = :manufacturer_id");
+			$this->db->bind(':manufacturer_id',$id);
+			return $this->db->single();
+		}
 
 	}

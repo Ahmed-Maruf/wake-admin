@@ -37,7 +37,7 @@
 									Select image to upload:
 									<input type = "file" name = "filename" id = "file" >
 									<div style = "margin-top: 2.5rem" >
-										<div ><img id = "blah" src = "/assets/img/manufImages/Placeholder.png"
+										<div ><img id = "blah" src = "<?php echo URLROOT?>admin/public/img/Placeholder.png"
 												   alt = "your image" /></div >
 										<input id = "filesubmit" type = "button" value = "Upload Image"
 											   name = "button" >
@@ -56,7 +56,7 @@
 										<?php
 											foreach ($datas as $data):
 												?>
-												<option value = "<?php echo $data->id ?>>" ><?php echo $data->name . ' | ' . $data->id ?></option >
+												<option value = "<?php echo $data->id ?>" ><?php echo $data->name . ' | ' . $data->id ?></option >
 											<?php
 											endforeach;
 										?>

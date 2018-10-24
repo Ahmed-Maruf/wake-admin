@@ -27,8 +27,9 @@
 			$datas['keywordTag'] = $_POST['k'];
 			$datas['titleTag']= $_POST['t'];
 			$datas['about'] = $_POST['a'];
+			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
 			$datas['manufacturer_name'] = str_replace(" ", "-", $datas['name']);
-			$datas['image']= strtolower($datas['manufacturer_name'] . '.png');
+			$datas['image']= strtolower($datas['manufacturer_name'] . $datas['imageFormat']);
 			if($_POST['image'] == ""){
 				$datas['image'] = "";
 			}
@@ -37,6 +38,16 @@
 			}else{
 				echo json_encode( FALSE );
 			}
+		}
+		
+		public function edit($id)
+		{
+			
+			if($_GET['status'] =='show'){
+				$manufacturer = $this->manufacturerModel->getManufacturerById($id);
+				return $this->view('manufacturer.edit',$manufacturer);
+			}
+			$manufacturers = $this->manufacturerModel->getManufacturerById($id);
 		}
 
 	}

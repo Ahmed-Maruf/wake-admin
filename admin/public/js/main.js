@@ -28,7 +28,11 @@ $(document).ready(function () {
 		"ajax": {
 			url: "homes/check",
 			type: "get",
-
+            error: function () {
+                $(".inventory-grid-error").html("");
+                $("#inventory-table").append('<tbody class="inventory-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody> ');
+                $("#inventory-table_processing").css("display", "none");
+            },
 			"columns": [
 				{"data": 0},
 				{"data": 1},
@@ -111,12 +115,15 @@ $(document).ready(function () {
 	});
 
 	let image = "";
+	let imageFormat = "";
 	console.log(CKEDITOR);
 	CKEDITOR.replace('about');
 	$('.ui.dropdown')
 		.dropdown();
 	$('#createManf')
 		.click(function () {
+		    imageFormat = imageFormat.split('.');
+		    console.log(imageFormat);
 			$(this).addClass('disabled loading');
 			let manfName = $('#name').val();
 			let titleTag = $('#titleTag').val();
@@ -127,7 +134,7 @@ $(document).ready(function () {
 			$.ajax({
 				url: 'manufacturers/add',
 				method: 'post',
-				data: {n: manfName, t: titleTag, d: descTag, k: keyTag, a: about, image: image }
+				data: {n: manfName, t: titleTag, d: descTag, k: keyTag, a: about, image: image, imageFormat:imageFormat[1]}
 			}).done(function (resp) {
 				if (resp){
 					console.log('success');
@@ -138,18 +145,22 @@ $(document).ready(function () {
 	$('#findButton')
 		.click(function (e) {
 			let manf = $('#findManfForm').form('get values');
-			window.location.assign('editManuf.php?m='+manf.findManf);
+			window.location.assign('manufacturers/edit/'+manf.findManf+'?status=show');
 		});
 
 	$("#filesubmit").click(function(event) {
 		event.preventDefault();
+		console.log('This is clicked');
 		var file_data = $("#file").prop("files")[0];
+		console.log(file_data);
+		imageFormat = file_data.name;
+		console.log(imageFormat);
 		let name = $('#name').val();
 		var form_data = new FormData();
 		form_data.append("name", name);
 		form_data.append("file", file_data);
 		$.ajax({
-			url: "uploadManufImage.php", // Upload Script
+			url: "/wake/admin/Images/upload", // Upload Script
 			cache: false,
 			contentType: false,
 			processData: false,
@@ -159,9 +170,6 @@ $(document).ready(function () {
 			image  = file_data.name;
 			window.alert(r);
 			console.log(image);
-
-
-
 
 		});
 	});
