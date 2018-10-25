@@ -20,5 +20,22 @@
     <link rel="stylesheet" href=<?php echo URLROOT .'admin/public/css/style.css'?>>
     <link rel="stylesheet" href="https://use.fontawesome.com/9cff9134e9.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css">
+
+    <script>
+        function trans(id){
+            $('.' + id)
+                .transition('fade down')
+            ;
+            document.getElementById(id).style.display = "inline";
+
+        }
+        function transback(id){
+            $('.' + id)
+                .transition('fade up')
+            ;
+            document.getElementById(id).style.display = "none";
+        }
+    </script>
+    
 </head>
 <body>

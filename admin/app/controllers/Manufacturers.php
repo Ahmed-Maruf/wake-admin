@@ -71,7 +71,8 @@
 		}
 
 		public function control(){
-			return $this->view('manufacturer.control');
+			$manufacturers = $this->manufacturerModel->getAllManufacturers();
+			return $this->view('manufacturer.control',$manufacturers);
 		}
 
 	}
