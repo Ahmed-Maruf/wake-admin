@@ -23,15 +23,16 @@
 						Homepage Table
 					</h1>
 				</div>
+
 			</div>
 			<div class="ui vertical segment" style="padding-bottom: 0;">
 				<div class="ui grid container">
 					<div class="twelve wide column" >
 						<div class="ui stackable three column grid">
 								<?php
-									$total = count($datas);
+									$total = count($datas[0]);
 									$counter = 0;
-									foreach($datas as $data) {
+									foreach($datas[0] as $data) {
 										$about = $data->about;
 										$about = str_replace("<p>", "", $about);
 										$about = str_replace("</p>", "", $about);
@@ -74,5 +75,5 @@
 </div>
 
 <?php
-	include 'layouts/footer.layout.php'
+	require 'layouts/footer.layout.php';
 ?>

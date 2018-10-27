@@ -6,9 +6,9 @@
         <div class="content">
             <div class="ui animated list">
                 <a href="<?php echo URLROOT . 'admin/manufacturers'?>" class="link item">Manage Manufacturers</a>
-                <a href="/admin/manageSeries.php" class="link item">Manage Series</a>
-                <a href="<?php echo URLROOT . 'admin/manufacturers/control'?>" class="link item">Manage Products</a>
-                <a href="/admin/manageHomepage.php" class="link item">Manage Homepage</a>
+                <a href="<?php echo URLROOT . 'admin/series'?>" class="link item">Manage Series</a>
+                <a href="" class="link item">Manage Products</a>
+                <a href="<?php echo URLROOT . 'admin/manufacturers/control'?>" class="link item">Manage Homepage</a>
                 <!--<a href="/admin/manageRevs.php" class="link item">Manage Revisions</a>-->
                 <a href="/admin/manageFAQ.php" class="link item">Manage FAQs</a>
                 <a href="/admin/manageAboutUs.php" class="link item">Manage About Us</a>

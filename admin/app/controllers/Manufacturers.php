@@ -70,9 +70,45 @@
 			}
 		}
 
-		public function control(){
-			$manufacturers = $this->manufacturerModel->getAllManufacturers();
-			return $this->view('manufacturer.control',$manufacturers);
+		public function updateHomePageOrderById(){
+			$id = $_POST['numb'];
+			if($this->manufacturerModel->updateHomePageOrderById($id)){
+				echo json_encode(true);
+			}else json_encode(false);
 		}
+
+		public function control(){
+
+			$activeManufacturers = $this->manufacturerModel->getAllManufacturers();
+			$inactiveManufacturers = $this->manufacturerModel->getInactiveManufacturers();
+
+			$datas[] = $activeManufacturers;
+			$datas[] = $inactiveManufacturers;
+			//die(var_dump($datas));
+			return $this->view('manufacturer.control',$datas);
+		}
+
+		public function placeBefore()
+		{
+			$firstNumber = $_POST['numb'];
+			$secondNumber = $_POST['numb2'];
+
+			if ($this->manufacturerModel->placeBefore($firstNumber,$secondNumber)){
+				echo json_encode(true);
+			}else{
+				echo json_encode(false);
+			}
+		}
+
+		public function deleteManufacturerById(){
+			$id = $_GET['id'];
+			if ($this->manufacturerModel->deleteManufacturerById($id)){
+				echo json_encode(true);
+			}else{
+				echo json_encode(false);
+			}
+		}
+
+
 
 	}

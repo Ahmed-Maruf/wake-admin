@@ -15,7 +15,7 @@
 			$fileSize = $_FILES['file']['size'];
 			$fileError = $_FILES['file']['error'];
 			$fileType = $_FILES['file']['type'];
-			
+			$imageFolder = $_POST['imageFolder'];
 			$fileExtension = explode('.',$fileName);
 			
 			$fileActualExtension = strtolower(end($fileExtension));
@@ -25,7 +25,7 @@
 				if(!$fileError){
 					if ($fileSize < 500000){
 						$newFileName = $customFileName.".".$fileActualExtension;
-						$fileDestination = 'img/manufacturerImages/' . $newFileName;
+						$fileDestination = 'img/'.$imageFolder.'/' . $newFileName;
 						move_uploaded_file($fileTempName,$fileDestination);
 						echo 'File uploaded successfully';
 					}else{

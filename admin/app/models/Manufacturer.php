@@ -19,10 +19,19 @@
 		{
 			$this->db->query("SELECT *
 								  FROM manufacturers
-								  ORDER BY id");
+								  WHERE homepageOrder != 0
+								  ORDER BY homepageOrder");
 
 			return $this->db->resultSet();
 
+		}
+
+		public function getInactiveManufacturers(){
+			$this->db->query("SELECT *
+								  FROM manufacturers
+								  WHERE homepageOrder = 0
+								  ORDER BY id");
+			return $this->db->resultSet();
 		}
 
 		public function createManufacturer($datas){
@@ -85,6 +94,101 @@
 
 
 			if($this->db->execute()){
+				return true;
+			}
+			return false;
+		}
+
+
+		public function updateHomePageOrderById($id)
+		{
+			$manufacturer = $this->getManufacturerById(id);
+			$pageOrder = $manufacturer->homepageOrder;
+			$this->db->query("UPDATE
+								  manufacturers 
+								  SET homepageOrder=0
+								  WHERE id = :manufacturer_id");
+			$this->db->bind(':manufacturer_id',$id);
+			if ($this->db->execute()){
+				$this->db->query("UPDATE
+									  manufacturers
+									  SET homepageOrder=homepageOrder-1
+									  WHERE homepageOrder!=0
+									  AND homepageOrder > :page_order");
+				$this->db->bind(':page_order',$pageOrder);
+
+				if($this->db->execute()){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		}
+
+		public function placeBefore($firstNumber,$secondNumber)
+		{
+			$manufacturer = $this->getManufacturerById($firstNumber);
+			$pageOrder = $manufacturer->homepageOrder;
+
+			$this->db->query("SELECT *
+								  FROM manufacturers
+								  WHERE homepageOrder > 0");
+			$manufacturers = $this->db->single();
+
+			if ($pageOrder == ''){
+				$this->db->query("UPDATE manufacturers 
+									  SET homepageOrder = homepageOrder+1 
+									  WHERE homepageOrder != 0 
+									  AND homepageOrder >= 1");
+
+				if ($this->db->execute()){
+					$this->db->query("UPDATE manufacturers 
+									  SET homepageOrder = 1 
+									  WHERE id = :manufacturer_id 
+									  ");
+					$this->db->bind(':manufacturer_id', $secondNumber);
+					if ($this->db->execute()){
+						return true;
+					}
+					return false;
+				}
+				return false;
+			}
+			$this->db->query("UPDATE manufacturers 
+								  SET homepageOrder = homepageOrder+1 
+								  WHERE homepageOrder != 0 
+								  AND homepageOrder >= :page_order");
+			$this->db->bind('page_order',$pageOrder);
+			if ($this->db->execute()){
+				$this->db->query("UPDATE manufacturers 
+									  SET homepageOrder = :page_order 
+									  WHERE id = :manufacturer_id 
+									  ");
+				$this->db->bind(':page_order',$pageOrder);
+				$this->db->bind(':manufacturer_id',$secondNumber);
+
+				if ($this->db->execute()){
+					return true;
+				}
+				return false;
+			}
+			return false;
+		}
+
+		public function deleteManufacturerById($id){
+			$this->db->query('DELETE 
+								  manufacturers,
+								  series,
+								  products 
+								  FROM manufacturers 
+								  INNER JOIN 
+								  series ON series.manufacturers_id = manufacturers.id 
+								  INNER JOIN products ON products.manufacturers_id = manufacturers.id 
+								  WHERE manufacturers.id = :id');
+			$this->db->bind(':id',$id);
+
+			if ($this->db->execute()){
 				return true;
 			}
 			return false;

@@ -20,7 +20,7 @@
     <link rel="stylesheet" href=<?php echo URLROOT .'admin/public/css/style.css'?>>
     <link rel="stylesheet" href="https://use.fontawesome.com/9cff9134e9.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css">
-
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
         function trans(id){
             $('.' + id)

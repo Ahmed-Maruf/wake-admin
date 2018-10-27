@@ -35,6 +35,7 @@
 								</div >
 								<div style = " margin-bottom: 3rem;" >
 									Select image to upload:
+									<input type = "hidden" name="manufacturerImages" value="manufacturerImages" id="imageFolder">
 									<input type = "file" name = "filename" id = "file" >
 									<div style = "margin-top: 2.5rem" >
 										<div ><img id = "blah" src = "<?php echo URLROOT?>admin/public/img/Placeholder.png"
@@ -50,8 +51,7 @@
 						</div >
 						<div class = "ui segment" >
 							<div class = "ui header" >Edit Manufacturer</div >
-							<form class = "ui form" id = "findManfForm" method = "post"
-								  onsubmit = "return confirm('Do you really want to delete this selected manufacturer?');" >
+							<form class = "ui form" id = "findManfForm">
 								<div class = "field" >
 									<select name = "findManf" id = "findManf" class = "ui dropdown" >
 										<?php
@@ -65,9 +65,7 @@
 								</div >
 								<div class = "ui positive button" id = "findButton" >Edit!</div >
 
-
-								<input type = "submit" id = "deleteButton" name = "delete" value = "Delete!"
-									   style = "height: 35px; width: 64px; color: red;" >
+								<div class = "ui positive button" id = "DeleteButton" >Delete!</div >
 
 								<!---->
 
