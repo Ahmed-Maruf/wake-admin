@@ -22,4 +22,10 @@
 			header( "Content-Type: application/json" );
 			echo json_encode($matchedProducts);
 		}
+
+		public function bulkImageUpload()
+		{
+			$products = $this->productModel->getAllProducts();
+			return $this->view('buildImageUpload',$products);
+		}
 	}

@@ -9,6 +9,7 @@ $.fn.api.settings.api = {
 (function ($) {
 	$(document).ready(function () {
 
+
 		$('#editPageSearch')
 			.search({
 				apiSettings: {
@@ -142,6 +143,8 @@ $.fn.api.settings.api = {
 				cru_event = cru_event+'/'+manufacturer_id;
 				event = 'updated';
 			}
+			console.log('saving image as = '+image);
+			console.log(arf);
 			console.log(cru_event);
 			$.ajax({
 				url: '/wake/admin/manufacturers/'+cru_event,
@@ -165,43 +168,133 @@ $.fn.api.settings.api = {
 		});
 
 
+
+		/*
+		* @ Activate CKEDITOR for description and shortDescription
+		* */
+
+		if($('#description').length) CKEDITOR.replace('description');
+		if($('#shortDescription').length) CKEDITOR.replace('shortDescription');
+
+		/*If this event is clicked then
+		* enter to the callback
+		* */
 		$('#series_event').click(function () {
-			console.log('series clicked0');
-			imageFormat = imageFormat.split('.');
-			console.log(imageFormat);
-			$(this).addClass('disabled loading');
-			let manufacturer_id = $('#manf').val();
-			let Name = $('#name').val();
-			let titleTag = $('#titleTag').val();
-			let descTag = $('#descTag').val();
-			let keyTag = $('#keyTag').val();
-			let about = CKEDITOR.instances.about.getData();
-			let cru_event = $('#series_cru').val();
-			let event = 'created';
-			if(cru_event === 'update') {
-				cru_event = cru_event+'/'+manufacturer_id;
-				event = 'updated';
+			/*
+			* List of all data related to database
+			* and form field
+			* */
+			let formData = {
+				manufacturerID: '',
+				seriesID:'',
+				seriesActivity: '',
+				event: 'created', //Default event is created
+				name:'',
+				pageName:'',
+				description:'',
+				shortDescription:'',
+				titleTag: '',
+				descriptionTag: '',
+				keywordTag: '',
+				image: $('#seriesImage').val() ? $('#seriesImage').val(): '', //Check for already existing image in db
+				imageFormat: ''
+			};
+
+			/*Set Image format during upload*/
+			formData.imageFormat = imageFormat.split('.');
+			formData.imageFormat = formData.imageFormat[1];
+
+			//$(this).addClass('disabled loading');
+
+			/*Set the data with new values if any*/
+			formData.manufacturerID = $('#currentManufacturer').val() ? $('#currentManufacturer').val() : '';
+			formData.seriesID = $('#seriesID').val() ? $('#seriesID').val() : '';
+			formData.name = $('#name').val() ? $('#name').val() : '';
+			formData.titleTag = $('#titleTag').val() ? $('#titleTag').val() : '';
+			formData.pageName = $("#pageName").val() ? $("#pageName").val() : '';
+			formData.descriptionTag = $('#descriptionTag').val() ? $('#descriptionTag').val(): '';
+			formData.keywordTag = $('#keywordTag').val() ? $('#keywordTag').val(): '';
+
+			/*Set or Catch the error for empty instances thrown by ckeditor*/
+			try {
+				formData.description = CKEDITOR.instances.description.getData();
+			}catch (e) {
+				console.log('Empty Description and the error is '+e);
 			}
-			console.log(cru_event);
+
+			/*Set or Catch the error for empty instances thrown by ckeditor*/
+			try {
+				formData.shortDescription = CKEDITOR.instances.shortDescription.getData();
+			}catch (e) {
+				console.log('Empty short Description and the error is '+e);
+			}
+
+			/*
+			* Check for requested activity either update or create
+			* */
+
+			formData.seriesActivity = $('#seriesActivity').val() ? $('#seriesActivity').val(): '';
+			if(formData.seriesActivity === 'update') {
+				formData.seriesActivity = formData.seriesActivity+'/'+formData.seriesID;
+				formData.event = 'updated';
+			}
+
+			console.log(formData);
+			/*Dynamic call to ajax either create or update*/
+
 			$.ajax({
-				url: '/wake/admin/series/'+cru_event,
+				url: '/wake/admin/series/'+formData.seriesActivity,
 				method: 'post',
-				data: {
-					i: manufacturer_id,
-					n:Name,
-					t: titleTag,
-					d: descTag,
-					k: keyTag,
-					a: about,
-					image: image,
-					imageFormat: imageFormat[1]
-				}
+				data: formData
+
 			}).done(function (resp) {
 				if (resp) {
 					console.log('success');
-					swal('Success!', 'The manufacturer was '+event, 'success');
+					swal('Success!', 'The Series is '+formData.event, 'success');
+					swal({
+						title: 'Success!',
+						text: "The Series is "+formData.event,
+						type: 'success',
+						confirmButtonColor: '#3085d6',
+						confirmButtonText: 'Ok',
+						preConfirm: function () {
+							return new Promise(function (resolve) {
+								window.location.reload();
+							})
+						}
+					}).catch(function (response) {
+						console.log(response);
+					});
 				}
 			});
+		});
+
+
+		$('#bulkImageUpload').on('click',function () {
+
+			let formData = {
+				selectedItems: '',
+				uploadedImage: '',
+				imageFolder: '',
+				imageFormat: '',
+				image: ''
+
+			};
+			formData.selectedItems = $('.search.dropdown').dropdown("get value");
+			formData.uploadedImage = $("#file").prop("files")[0].name;
+			formData.imageFormat = $("#file").prop("files")[0].type;
+			formData.imageFolder = $('#imageFolder').val();
+			//formData.image = $("#file").prop("files")[0];
+			console.log(formData);
+			$.ajax({
+				url: "/wake/admin/Images/bulkImageUpload", // Upload Script
+				data: formData, // Setting the data attribute of ajax with file_data
+				type: 'POST',
+			}).done(function (r) {
+				swal('Success!', 'Images uploaded', 'success');
+
+			});
+
 		});
 
 
@@ -234,12 +327,21 @@ $.fn.api.settings.api = {
 		});
 
 		$('#findButton').click(function (e) {
-			let manf = $('#findManfForm').form('get values');
-			window.location.assign('manufacturers/update/' + manf.findManf + '?status=show');
+			console.log('This');
+			console.log($('#findManfForm').form('get values'));
+			console.log($('#findSer').form('get values').serDrp !== undefined);
+
+			if($('#findManfForm').form('get values').findManf !== undefined){
+				let manf = $('#findManfForm').form('get values');
+				window.location.assign('manufacturers/update/' + manf.findManf + '?status=show');
+			}else if ($('#seriesUpdate').form('get values').currentSeries !== undefined) {
+				let series = $('#seriesUpdate').form('get values');
+				window.location.assign('series/update/' + series.currentSeries + '?status=show');
+			}
 		});
 
 
-		$("#filesubmit").click(function (event) {
+		$("#imageUpload").click(function (event) {
 			event.preventDefault();
 			console.log('This is clicked');
 			var file_data = $("#file").prop("files")[0];

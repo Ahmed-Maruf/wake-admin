@@ -17,4 +17,18 @@
 		{
 			imageUpload();
 		}
+
+		public function bulkImageUpload(){
+			/*
+			 * Store information from the post data
+			 * */
+			$datas = [];
+			$datas['selectedItems'] = $_POST['name'];
+			$datas['uploadedImage'] = $_POST['uploadedImage'];
+			$datas['file'] = $_FILES['image'];
+			$datas['imageFolder'] = $_POST['imageFolder'];
+			$datas['imageFormat'] = $_POST['imageFormat'];
+
+			bulkImagesUpload($datas);
+		}
 	}

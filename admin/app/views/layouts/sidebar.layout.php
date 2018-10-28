@@ -1,3 +1,4 @@
+
 <div class="ui visible left sidebar inverted vertical menu">
     <a href="<?php echo URLROOT . 'admin'?>" class="item"><i class="rocket icon"></i> Home</a>
     <div class="ui inverted accordion item">
@@ -27,7 +28,7 @@
     </div>
     <a href=""></a>
     <a href="/admin/uploadProducts.php" class="item"><i class="upload icon"></i>Upload Products</a>
-    <a href="/admin/uploadImage.php" class="item"><i class="cloud upload icon"></i>Upload Images</a>
+    <a href="<?php echo URLROOT . 'admin/products/	bulkImageUpload'?>" class="item"><i class="cloud upload icon"></i>Upload Images</a>
     <div class="ui search item" id="editPageSearch">
         <div class="ui icon input">
             <input class="prompt" type="text" placeholder="Edit pages...">

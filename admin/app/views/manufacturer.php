@@ -40,7 +40,7 @@
 									<div style = "margin-top: 2.5rem" >
 										<div ><img id = "blah" src = "<?php echo URLROOT?>admin/public/img/Placeholder.png"
 												   alt = "your image" /></div >
-										<input id = "filesubmit" type = "button" value = "Upload Image"
+										<input id = "imageUpload" type = "button" value = "Upload Image"
 											   name = "button" >
 									</div >
 								</div >

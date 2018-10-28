@@ -87,4 +87,12 @@
 
 			return $results;
 		}
+
+		public function getAllProducts()
+		{
+			$this->db->query("SELECT *
+								  FROM products");
+
+			return $this->db->resultSet();
+		}
 	}
