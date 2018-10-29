@@ -8,8 +8,8 @@
 	
 	//@- DB Params
 	define("DB_HOST","localhost");
-	define("DB_USER","root");
-	define("DB_PASS","mysql");
+	define("DB_USER", 'root');
+	define("DB_PASS",'');
 	define("DB_NAME","wake");
 // @- App root
 	define('APPROOT',dirname(dirname(__FILE__)));
