@@ -17,7 +17,7 @@
 								<?php
 									foreach ($datas as $data):
 										?>
-										<option value = "<?php echo $data->id?>|<?php echo $data->manufacturers_id?>|<?php echo $data->series_id?>" ><?php echo $data->part_number?></option >
+										<option value = "<?php echo $data->id?>|<?php echo $data->manufacturers_id?>|<?php echo $data->series_id?>|<?php echo $data->part_number?>" ><?php echo $data->part_number?></option >
 									<?php
 									endforeach;
 								?>
@@ -29,7 +29,7 @@
 								   id = "imageFolder" >
 							<input type = "file" name = "filename" id = "file" >
 							<div style = "margin-top: 2.5rem" >
-								<input id = "bulkImageUpload" type = "button" value = "Upload Image" name = "button" >
+                                <div class = "ui positive button" id = "bulkImageUpload" >Upload Image!</div >
 							</div >
 						</div >
 

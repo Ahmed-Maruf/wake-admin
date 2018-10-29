@@ -277,23 +277,35 @@ $.fn.api.settings.api = {
 				uploadedImage: '',
 				imageFolder: '',
 				imageFormat: '',
-				image: ''
+				imageFile: ''
 
 			};
-			formData.selectedItems = $('.search.dropdown').dropdown("get value");
-			formData.uploadedImage = $("#file").prop("files")[0].name;
-			formData.imageFormat = $("#file").prop("files")[0].type;
-			formData.imageFolder = $('#imageFolder').val();
-			//formData.image = $("#file").prop("files")[0];
-			console.log(formData);
-			$.ajax({
-				url: "/wake/admin/Images/bulkImageUpload", // Upload Script
-				data: formData, // Setting the data attribute of ajax with file_data
-				type: 'POST',
-			}).done(function (r) {
-				swal('Success!', 'Images uploaded', 'success');
+			var selectedItems = $('.search.dropdown').dropdown("get value");
+            var file_data = $("#file").prop("files")[0];
+            imageFormat = file_data.name;
+            var form_data = new FormData();
+            var imageFolder = $('#imageFolder').val();
+            var imageName = $("#file").prop("files")[0].name;
+            var imageType = $("#file").prop("files")[0].type;
+            form_data.append("selectedItems", selectedItems);
+            form_data.append("file", file_data);
+            form_data.append("imageFolder",imageFolder);
+            form_data.append("imageName",imageName);
+            form_data.append("imageType",imageType);
 
-			});
+            $.ajax({
+                url: "/wake/admin/Images/bulkImageUpload", // Upload Script
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data, // Setting the data attribute of ajax with file_data
+                type: 'POST',
+            }).done(function (r) {
+                image = file_data.name;
+                swal('Success!', 'Images uploaded', 'success');
+                console.log(image);
+
+            });
 
 		});
 

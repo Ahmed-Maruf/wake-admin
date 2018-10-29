@@ -15,20 +15,18 @@
 		
 		public function upload()
 		{
-			imageUpload();
+			$name = $_POST['name'];
+			imageUpload($name);
 		}
 
 		public function bulkImageUpload(){
-			/*
-			 * Store information from the post data
-			 * */
-			$datas = [];
-			$datas['selectedItems'] = $_POST['name'];
-			$datas['uploadedImage'] = $_POST['uploadedImage'];
-			$datas['file'] = $_FILES['image'];
-			$datas['imageFolder'] = $_POST['imageFolder'];
-			$datas['imageFormat'] = $_POST['imageFormat'];
-
-			bulkImagesUpload($datas);
+			$selectedItems = explode(',',$_POST['selectedItems']);
+			$format = explode('.',$_POST['imageName']);
+			$status = false;
+			foreach ($selectedItems as $selectedItem){
+				$stored_information =  explode('|',$selectedItem);
+				$status = $this->imageModel->updateBulkImageName($stored_information,end($format));
+			}
+			imageUpload('bulkImage');
 		}
 	}
