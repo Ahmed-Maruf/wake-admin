@@ -381,6 +381,63 @@ $.fn.api.settings.api = {
 
 			});
 		});
+		
+		// faq delete
+		$('#deleteFAQ')
+		.click(function (e) {
+			e.preventDefault();
+			$(this).addClass('disabled');
+			$(this).children('i').addClass('fa-spin');
+			$.ajax({
+				url: '/wake/admin/faqs/remove',
+			}).done(function (r) {
+				console.log(r);
+				if(r) {
+					swal('Success!', 'FAQ was deleted!', 'success').then(function () {
+						window.location.reload();
+					})
+				}
+			});
+		});
+
+		// faq add
+		$('#addToDb')
+		.click(function (e) {
+			let d = $('#addfaq').form('get values');
+
+			$.ajax({
+				url: '/wake/admin/faqs/create',
+				method: 'post',
+				data: {d: d}
+			}).done(function (r) {
+				if (r) {
+					swal('Success!', 'FAQ was added!', 'success').then(function () {
+						window.location.reload();
+					})
+				}
+			})
+		})
+
+		// faq updatw
+		$('#updatefaq')
+		.click(function (e) {
+			let data = $('#existingfaq').form('get values');
+
+			let d = data;
+
+			$.ajax({
+				url: '/wake/admin/faqs/update',
+				method: 'post',
+				data: {d:d}
+			}).done(function (r) {
+				if (r) {
+					swal('Success!', 'The faq was updated', 'success').then(function () {
+						window.location.reload();
+					});
+
+				}
+			})
+		})
 
 		function readURL(input) {
 
