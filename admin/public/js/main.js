@@ -120,61 +120,104 @@ $.fn.api.settings.api = {
 
 		let image = "";
 		let imageFormat = "";
-		//console.log(CKEDITOR);
-		console.log(CKEDITOR);
-		console.log($('#about'));
-		if($('#about').length) CKEDITOR.replace('about');
 		$('.ui.dropdown').dropdown();
 
+        /*
+        * @ Activate CKEDITOR for description
+        * */
+
+        if($('#description').length) CKEDITOR.replace('description');
+        if($('#shortDescription').length) CKEDITOR.replace('shortDescription');
+        /*If this event is clicked then
+        * enter to the callback
+        * */
+
 		$('#manufacturer_event').click(function () {
-			imageFormat = imageFormat.split('.');
-			console.log(imageFormat);
-			$(this).addClass('disabled loading');
-			let manufacturer_id = $('#manufacturer_id').val();
-			let pageName = $('#page-name').val();
-			let manfName = $('#name').val();
-			let titleTag = $('#titleTag').val();
-			let descTag = $('#descTag').val();
-			let keyTag = $('#keyTag').val();
-			let about = CKEDITOR.instances.about.getData();
-			let cru_event = $('#manufacturer_cru').val();
-			let event = 'created';
-			if(cru_event === 'update') {
-				cru_event = cru_event+'/'+manufacturer_id;
-				event = 'updated';
-			}
-			console.log('saving image as = '+image);
-			console.log(arf);
-			console.log(cru_event);
-			$.ajax({
-				url: '/wake/admin/manufacturers/'+cru_event,
-				method: 'post',
-				data: {
-					n: manfName,
-					p:pageName,
-					t: titleTag,
-					d: descTag,
-					k: keyTag,
-					a: about,
-					image: image,
-					imageFormat: imageFormat[1]
-				}
-			}).done(function (resp) {
-				if (resp) {
-					console.log('success');
-					swal('Success!', 'The manufacturer was '+event, 'success');
-				}
-			});
+
+			/*
+			* List of all data related to database
+			* and form field
+			* */
+            let formData = {
+                manufacturerID: '',
+                seriesID:'',
+                manufacturerActivity: '',
+                event: 'created', //Default event is created
+                name:'',
+                pageName:'',
+                description:'',
+                shortDescription:'',
+                titleTag: '',
+                descriptionTag: '',
+                keywordTag: '',
+                image: $('#manufacturerImage').val() ? $('#manufacturerImage').val(): '', //Check for already existing image in db
+                imageFormat: ''
+            };
+
+            /*Set Image format during upload*/
+            formData.imageFormat = imageFormat.split('.');
+            formData.imageFormat = formData.imageFormat[1];
+
+		/*	$(this).addClass('disabled loading');*/
+
+            /*Set the data with new values if any*/
+            formData.manufacturerID = $('#manufacturerID').val() ? $('#manufacturerID').val() : '';
+            //formData.seriesID = $('#ID').val() ? $('#seriesID').val() : '';
+            formData.name = $('#name').val() ? $('#name').val() : '';
+            formData.titleTag = $('#titleTag').val() ? $('#titleTag').val() : '';
+            formData.pageName = $("#pageName").val() ? $("#pageName").val() : '';
+            formData.descriptionTag = $('#descriptionTag').val() ? $('#descriptionTag').val(): '';
+            formData.keywordTag = $('#keywordTag').val() ? $('#keywordTag').val(): '';
+            formData.description = $('#description').val() ? $('#description').val(): '';
+
+            /*Set or Catch the error for empty instances thrown by ckeditor*/
+            try {
+                formData.description = CKEDITOR.instances.description.getData();
+            }catch (e) {
+                console.log('Empty Description and the error is '+e);
+            }
+
+            /*
+             * Check for requested activity either update or create
+             * */
+
+            formData.manufacturerActivity = $('#manufacturerActivity').val() ? $('#manufacturerActivity').val(): '';
+            if(formData.manufacturerActivity === 'update') {
+                formData.manufacturerActivity = formData.manufacturerActivity+'/'+formData.manufacturerID;
+                formData.event = 'updated';
+            }
+
+            console.log(formData);
+
+            /*Dynamic call to ajax either create or update*/
+
+            $.ajax({
+                url: '/wake/admin/manufacturers/'+formData.manufacturerActivity,
+                method: 'post',
+                data: formData
+
+            }).done(function (resp) {
+                if (resp) {
+                    console.log('success');
+                    swal('Success!', 'The Event is '+formData.event, 'success');
+                    swal({
+                        title: 'Success!',
+                        text: "The Event is "+formData.event,
+                        type: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok',
+                        preConfirm: function () {
+                            return new Promise(function (resolve) {
+                               window.location.reload();
+                            })
+                        }
+                    }).catch(function (response) {
+                        console.log(response);
+                    });
+                }
+            });
 		});
 
-
-
-		/*
-		* @ Activate CKEDITOR for description and shortDescription
-		* */
-
-		if($('#description').length) CKEDITOR.replace('description');
-		if($('#shortDescription').length) CKEDITOR.replace('shortDescription');
 
 		/*If this event is clicked then
 		* enter to the callback
@@ -322,9 +365,14 @@ $.fn.api.settings.api = {
 				confirmButtonText: 'Yes, delete it!',
 				preConfirm: function () {
 					return new Promise(function (resolve) {
-						let manf = $('#findManfForm').form('get values');
+                        if($('#manufacturerUpdate').form('get values').currentManufacturer !== undefined){
+                            var manufacturer = $('#manufacturerUpdate').form('get values');
+                        }else if ($('#seriesUpdate').form('get values').currentSeries !== undefined) {
+                            var series = $('#seriesUpdate').form('get values');
+                        }
+
 						$.ajax({
-							url:'/wake/admin/manufacturers/deleteManufacturerById?id='+manf.findManf,
+							url:'/wake/admin/manufacturers/deleteManufacturerById?id='+manufacturer.currentManufacturer,
 							type:'post'
 						}).done(function (response) {
 							swal('Deleted!', response.message, response.status)
@@ -338,19 +386,22 @@ $.fn.api.settings.api = {
 			});
 		});
 
+
+		/*When edit is clicked this will be the callback
+		* and redirects to details page*/
 		$('#findButton').click(function (e) {
 			console.log('This');
-			console.log($('#findManfForm').form('get values'));
-			console.log($('#findSer').form('get values').serDrp !== undefined);
 
-			if($('#findManfForm').form('get values').findManf !== undefined){
-				let manf = $('#findManfForm').form('get values');
-				window.location.assign('manufacturers/update/' + manf.findManf + '?status=show');
+			if($('#manufacturerUpdate').form('get values').currentManufacturer !== undefined){
+				let manufacturer = $('#manufacturerUpdate').form('get values');
+				window.location.assign('manufacturers/update/' + manufacturer.currentManufacturer + '?status=show');
 			}else if ($('#seriesUpdate').form('get values').currentSeries !== undefined) {
 				let series = $('#seriesUpdate').form('get values');
 				window.location.assign('series/update/' + series.currentSeries + '?status=show');
 			}
 		});
+
+
 
 
 		$("#imageUpload").click(function (event) {

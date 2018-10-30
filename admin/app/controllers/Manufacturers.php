@@ -22,18 +22,22 @@
 		{
 			header( "Content-Type: application/json");
 			$datas = [];
-			$datas['name'] = $_POST['n'];
-			$datas['description'] = $_POST['d'];
-			$datas['keywordTag'] = $_POST['k'];
-			$datas['pageName'] = $_POST['p'];
-			$datas['titleTag']= $_POST['t'];
-			$datas['about'] = $_POST['a'];
+			$datas['name'] = $_POST['name'];
+			$datas['description'] = $_POST['description'];
+			$datas['keywordTag'] = $_POST['keywordTag'];
+			$datas['pageName'] = $_POST['pageName'];
+			$datas['titleTag']= $_POST['titleTag'];
 			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
-			$datas['manufacturer_name'] = str_replace(" ", "-", $datas['name']);
+			$datas['manufactureName'] = str_replace(" ", "-", $datas['name']);
+			
+			/*
+			 * Image name is set as given manufacturer name by the user
+			 * with replacing white spaces to - and added format
+			 * at the end
+			 * */
+			
 			$datas['image']= strtolower($datas['manufacturer_name'] . $datas['imageFormat']);
-			if($_POST['image'] == ""){
-				$datas['image'] = "";
-			}
+			
 			if ($this->manufacturerModel->createManufacturer($datas)){
 				echo json_encode( TRUE );
 			}else{
@@ -48,21 +52,37 @@
 				$manufacturer = $this->manufacturerModel->getManufacturerById($id);
 				return $this->view('manufacturer.edit',$manufacturer);
 			}
+			
 			header( "Content-Type: application/json");
 			$datas = [];
 			$datas['id'] = $id;
-			$datas['name'] = $_POST['n'];
-			$datas['description'] = $_POST['d'];
-			$datas['keywordTag'] = $_POST['k'];
-			$datas['pageName'] = $_POST['p'];
-			$datas['titleTag']= $_POST['t'];
-			$datas['about'] = $_POST['a'];
-			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
-			$datas['manufacturer_name'] = str_replace(" ", "-", $datas['name']);
-			$datas['image']= strtolower($datas['manufacturer_name'] . $datas['imageFormat']);
-			if($_POST['image'] == ""){
-				$datas['image'] = "";
+			$datas['name'] = $_POST['name'];
+			$datas['description'] = $_POST['description'];
+			$datas['keywordTag'] = $_POST['keywordTag'];
+			$datas['pageName'] = $_POST['pageName'];
+			$datas['titleTag']= $_POST['titleTag'];
+			$datas['descriptionTag'] = $_POST['descriptionTag'];
+			
+			/*
+			 * If not empty then
+			 * already an image info stored in db
+			 * pick this as priority
+			 * */
+			if ($_POST['image'] !== '')
+				$datas['image'] = $_POST['image'];
+			
+			
+			/*
+			 * If a new image is uploaded
+			 * pick this as priority
+			 * */
+			if ($_POST['imageFormat'])
+			{
+				$datas['imageFormat'] = '.'.$_POST['imageFormat'];
+				$datas['manufacturerName'] = str_replace(" ", "-", $datas['name']);
+				$datas['image']= strtolower($datas['manufacturerName'] . $datas['imageFormat']);
 			}
+			
 			if($this->manufacturerModel->updateManufacturerById($datas)){
 				echo json_encode( TRUE );
 			}else{

@@ -8,7 +8,7 @@
             <div class="ui animated list">
                 <a href="<?php echo URLROOT . 'admin/manufacturers'?>" class="link item">Manage Manufacturers</a>
                 <a href="<?php echo URLROOT . 'admin/series'?>" class="link item">Manage Series</a>
-                <a href="" class="link item">Manage Products</a>
+                <a href="<?php echo URLROOT . 'admin/products'?>" class="link item">Manage Products</a>
                 <a href="<?php echo URLROOT . 'admin/manufacturers/control'?>" class="link item">Manage Homepage</a>
                 <!--<a href="/admin/manageRevs.php" class="link item">Manage Revisions</a>-->
                 <a href="<?php echo URLROOT . 'admin/faqs'?>" class="link item">Manage FAQs</a>

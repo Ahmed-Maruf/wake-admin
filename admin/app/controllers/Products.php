@@ -12,6 +12,11 @@
 		{
 			$this->productModel = $this->model('Product');
 		}
+		
+		public function index()
+		{
+			return $this->view('product');
+		}
 
 		public function searchProduct()
 		{

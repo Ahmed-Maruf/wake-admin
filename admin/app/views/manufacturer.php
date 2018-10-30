@@ -13,22 +13,28 @@
 								Insert New Manufacturer
 							</div >
 							<form class = "ui form" id = "newManfForm" >
-								<div class = "field" >
+								
+                                <div class = "field" >
 									<input type = "text" name = "name" id = "name" placeholder = "Name" >
 								</div >
-								<div class = "field" >
+								
+                                <div class = "field" >
 									<input type = "text" name = "titleTag" id = "titleTag" placeholder = "Title Tag" >
 								</div >
-								<div class = "field" >
-									<input type = "text" name = "descTag" id = "descTag"
-										   placeholder = "Description Tag" >
-								</div >
-								<div class = "field" >
-									<input type = "text" name = "keyTag" id = "keyTag" placeholder = "Keywords Tag" >
-								</div >
-								<div class = "field" >
-									<textarea name = "about" id = "about" ></textarea >
-								</div >
+
+                                <div class = "field" >
+                                    <input type = "text" id = "descriptionTag" name = "descriptionTag"
+                                           placeholder = "Description Tag" >
+                                </div >
+
+                                <div class = "field" >
+                                    <input type = "text" id = "keywordTag" name = "keywordTag" placeholder = "Keywords Tag" >
+                                </div >
+
+                                <div class = "field" >
+                                    <label >Description</label >
+                                    <textarea name = "description" id = "description" ></textarea >
+                                </div >
 
 								<div style = "margin-top: 3rem" >
 									<label style = "font-style: italic; font-size: 130%;" >Upload an Image</label >
@@ -38,22 +44,24 @@
 									<input type = "hidden" name="manufacturerImages" value="manufacturerImages" id="imageFolder">
 									<input type = "file" name = "filename" id = "file" >
 									<div style = "margin-top: 2.5rem" >
-										<div ><img id = "blah" src = "<?php echo URLROOT?>admin/public/img/Placeholder.png"
-												   alt = "your image" /></div >
+										<div >
+                                            <img id = "blah" src = "<?php echo URLROOT?>admin/public/img/Placeholder.png"
+												   alt = "your image" />
+                                        </div >
 										<input id = "imageUpload" type = "button" value = "Upload Image"
 											   name = "button" >
 									</div >
 								</div >
 
-								<input type = "hidden" name="create" value="create" id="manufacturer_cru">
+								<input type = "hidden" name="create" value="create" id="manufacturerActivity">
 								<div class = "ui positive button" id = "manufacturer_event" >Create!</div >
 							</form >
 						</div >
 						<div class = "ui segment" >
 							<div class = "ui header" >Edit Manufacturer</div >
-							<form class = "ui form" id = "findManfForm">
+							<form class = "ui form" id = "manufacturerUpdate">
 								<div class = "field" >
-									<select name = "findManf" id = "findManf" class = "ui dropdown" >
+									<select name = "currentManufacturer" id = "currentManufacturer" class = "ui dropdown" >
 										<?php
 											foreach ($datas as $data):
 												?>

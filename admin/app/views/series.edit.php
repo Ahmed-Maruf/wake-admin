@@ -58,7 +58,8 @@
 									<input type = "hidden" name = "seriesImages" value = "seriesImages"
 										   id = "imageFolder" >
 									<input type="file" name="filename" id="file">
-									<div style="margin-top: 2.5rem">
+									
+                                    <div style="margin-top: 2.5rem">
 										<?php if ($datas->image == '') $datas->image = 'Placeholder.png'?>
 										<div><img id="blah" src="<?php echo URLROOT?>admin/public/img/seriesImages/<?php echo $datas->image?>"
 												  alt="your image"/>
