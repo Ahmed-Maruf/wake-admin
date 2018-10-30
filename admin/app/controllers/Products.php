@@ -6,6 +6,10 @@
 	 * Time: 3:05 PM
 	 */
 
+	require APPROOT . '/models/Manufacturer.php';
+	require APPROOT . '/models/serie.php';
+
+
 	class Products extends Controller
 	{
 		public function __construct()
@@ -15,7 +19,14 @@
 		
 		public function index()
 		{
-			return $this->view('product');
+			$manufacturers = new Manufacturer();
+			$manufacturersInfo = $manufacturers->getAllManufacturers();
+			$series = new serie();
+			$seriesInfo = $series->getAllSeriesByManufacturerId($manufacturersInfo[0]->id);
+			$datas['manufacturers'] = $manufacturersInfo;
+			$datas['series'] = $seriesInfo;
+
+			return $this->view('product',$datas);
 		}
 
 		public function searchProduct()

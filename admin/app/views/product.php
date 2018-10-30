@@ -15,46 +15,28 @@
 						</div>
 						<form class="ui form" id="newProductForm">
 							<div class="field">
-								<select name="manf" id="manf" class="ui dropdown" onchange="newManu()">
+								<select name="productManufacturer" id="productManufacturer" class="ui dropdown">
 									<?php
-										$count = 0;
-										foreach ($manufacturers as $manufacturer) {
-											$stmt3 = $dbl->prepare("SELECT * FROM series WHERE manufacturers_id = ?");
-											$stmt3->execute(array($manufacturer['id']));
-											$series = $stmt3->fetchAll();
-											$seriesArray[$count] = $series;
-											
+										foreach ($datas['manufacturers'] as $data) {
 											?>
-											<option value="<?=$count?>"><?=$manufacturer['name']?></option>
+											<option value="<?php echo $data->id?>"><?php echo $data->name?></option>
 											<?php
-											$count++;
 										}
 									?>
 								</select>
 							</div>
-							<?php
-								for($i = 0; $i < sizeof($seriesArray); $i++){
-									$id = "ser" . $i;
-									$id2 = "ser" . $i . "2";
-									$show = "none";
-									if($i == 0){
-										$show = "block";
-									}
-									?>
-									<div class="field" id="<?=$id?>" style="display: <?=$show?>">
-										<select name="ser" id="<?=$id2?>" class="ui dropdown">
-											<?php
-												foreach($seriesArray[$i] as $ser) {
-													?>
-													<option value="<?= $ser['name'] ?>"><?= $ser['name'] ?></option>
-													<?php
-												}
-											?>
-										</select>
-									</div>
+							<div class="field" id="" style="display: <?=$show?>">
+								<select name="ser" id="productSeries" class="ui dropdown">
+									<option value="">Please select a series</option>
 									<?php
-								}
-							?>
+										foreach($datas['series'] as $ser) {
+											?>
+											<option value="<?php echo $ser->id?>"><?php echo $ser->name ?></option>
+											<?php
+										}
+									?>
+								</select>
+							</div>
 							<div class="field">
 								<input type="text" name="partNumber" id="partNumber" placeholder="Part Number">
 							</div>

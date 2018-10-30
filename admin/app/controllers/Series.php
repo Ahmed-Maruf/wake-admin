@@ -110,4 +110,11 @@
 			}
 		}
 
+		public function getAllSeriesByManufacturerId($id)
+		{
+			$seriesInfo = $this->seriesModel->getAllSeriesByManufacturerId($id);
+			header( "Content-Type: application/json" );
+			echo json_encode($seriesInfo);
+		}
+
 	}

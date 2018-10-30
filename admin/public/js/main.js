@@ -353,6 +353,22 @@ $.fn.api.settings.api = {
 		});
 
 
+		$('#newProductForm').on('change','#productManufacturer',function () {
+			var manufacturerId = $('#newProductForm').form('get values').productManufacturer;
+			$.ajax({
+				url: "/wake/admin/series/getAllSeriesByManufacturerId/"+manufacturerId, // Upload Script
+
+				data: manufacturerId, // Setting the data attribute of ajax with file_data
+				type: 'POST',
+			}).done(function (response) {
+				$('option').val("");
+				jQuery.each(response, function(key, val){
+					console.log(key + ' | '+val['id']);
+					$("#productSeries").append("<option value='" + val['id'] + "'>" + val['name'] + "</option>")
+				});
+				console.log(response);
+			});
+		});
 		$('#DeleteButton').click(function (event) {
 			event.preventDefault();
 			swal({

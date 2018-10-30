@@ -60,17 +60,6 @@
 		}
 
 		public function updateSeriesById($datas){
-			/*$datas = [];
-			$datas['seriesId'] = $id;
-			$datas['name'] = $_POST['name'];
-			$datas['description'] = $_POST['description'];
-			$datas['shortDescription'] = $_POST['shortDescription'];
-			$datas['keywordTag'] = $_POST['keywordTag'];
-			$datas['pageName'] = $_POST['pageName'];
-			$datas['titleTag']= $_POST['titleTag'];
-			$datas['imageFormat'] = '.'.$_POST['imageFormat'];
-			$datas['seriesName'] = str_replace(" ", "-", $datas['name']);
-			$datas['image']= strtolower($datas['seriesName'] . $datas['imageFormat']);*/
 
 			$this->db->query("UPDATE
 								  series SET name = :seriesName, page_name = :pageName, title_tag = :titleTag, description_tag = :descriptionTag, keywords_tag = :keywordTag, description = :description, short_description = :shortDescription, image = :image
@@ -90,5 +79,16 @@
 				return true;
 			}
 			return false;
+		}
+
+		public function getAllSeriesByManufacturerId($id)
+		{
+			$this->db->query("SELECT *
+								  FROM series
+								  WHERE manufacturers_id = :id
+								  ORDER BY id");
+			$this->db->bind(':id',$id);
+			
+			return $this->db->resultSet();
 		}
 	}
